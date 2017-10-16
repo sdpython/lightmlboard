@@ -3,7 +3,9 @@
 @brief Defines a Tornado application.
 Tutorial `chat <https://github.com/tornadoweb/tornado/tree/stable/demos/chat>`_.
 """
+import os
 from tornado.web import Application
+from tornado.web import StaticFileHandler
 from .handlersml import TemplateHandler
 
 
@@ -41,7 +43,12 @@ class LightMLBoard(Application):
 
         @return     @see cl LightMLBoard
         """
-        return LightMLBoard([(r"/", MainHandler)])
+        this = os.path.dirname(__file__)
+        st = os.path.join(this, "static")
+        return LightMLBoard([
+            (r"/", MainHandler),
+            (r'/static/(.*)', StaticFileHandler, {'path': st}),
+        ])
 
     @staticmethod
     def start_app(port=8897):

@@ -8,7 +8,7 @@ README
     :target: https://travis-ci.org/sdpython/lightmlboard
     :alt: Build status
 
-.. image:: https://ci.appveyor.com/api/projects/status/4te066r8ne1ymmhy?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/6g0xro11tmc6t05d?svg=true
     :target: https://ci.appveyor.com/project/sdpython/lightmlboard
     :alt: Build Status Windows
 
