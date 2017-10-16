@@ -4,6 +4,7 @@
 @brief Module *lightmlboard*.
 Custom Machine Learning Leaderbord for a competition.
 """
+from .appml import LightMLBoard
 
 __version__ = "0.1"
 __author__ = "Xavier Dupré"

@@ -49,6 +49,6 @@ class LightMLBoard(Application):
         Starts the application.
         """
         import tornado.ioloop
-        app = LightMLBoard.create()
+        app = LightMLBoard.make_app()
         app.listen(port)
         tornado.ioloop.IOLoop.current().start()
