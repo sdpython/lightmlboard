@@ -7,9 +7,55 @@
 <link rel="shortcut icon" href="{{icon}}" />
 <meta content="" name="description" />
 </head>
-<body>
-<img src="{{image}}" />
-<h1>LightMLBoard</h1>
-<p>Simple panneau d'affichage pour une compétition de machine learning.</p>
+<body id="css-zen-garden">
+
+<div class="page-wrapper">
+
+        <section class="intro" id="zen-intro">
+            <header role="banner">
+                <h1>{{title}}</h1>
+                <p><img src="{{image}}" /></p>
+            </header>
+
+            <div class="summary" id="zen-summary" role="article">
+                <h2>{{subtitle}}</h2>
+                <p>{% raw description %}</p>
+            </div>
+            
+            <div class="preamble" id="zen-preamble" role="article">
+                <p>{% raw description2 %}</p>
+            </div>            
+        </section>
+
+        <div class="supporting" id="zen-supporting" role="main">
+            <div class="explanation" id="zen-explanation" role="article">
+                <h2>{{title_main}}</h2>
+                <p>{% raw description_main %}</p>
+            </div>
+
+            <footer>
+                <p><a href="http://www.xavierdupre.fr" class="zen-validate-html">xavierdupre.fr</a></p>
+            </footer>
+
+        </div>
+
+        <aside class="sidebar" role="complementary">
+            <div class="wrapper">
+                <div class="design-selection" id="design-selection">
+                    <nav role="navigation">
+                        <ul>
+                        <li><a href="login" class="design-name">Login</a></li>
+                        {% for item in competitions %}
+                        <li><a href="{{item.link}}" class="design-name">{{item.name}}</a></li>
+                        {% end for %}
+                        <li><a href="/logout">logout</a></li>
+                        </ul>
+                        <p class="cookies"><i>Le site utilise des cookies.</i></p>
+                        <p class="userclass">User: <i>{{ current_user['user'] }}</i></p>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+</div>
 </body>
 </html>

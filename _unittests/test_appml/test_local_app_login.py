@@ -46,9 +46,11 @@ from src.lightmlboard.appml import LightMLBoard
 class TestLocalApp(AsyncHTTPTestCase):
 
     def get_app(self):
-        return LightMLBoard.make_app()
+        this = os.path.dirname(__file__)
+        config = os.path.join(this, "this_default_options.py")
+        return LightMLBoard.make_app(config=config)
 
-    def test_local_fetch(self):
+    def test_local_login(self):
         fLOG(
             __file__,
             self._testMethodName,

@@ -15,4 +15,4 @@ set pythonexe=c:\Python36_x64\python
 set current=%~dp0..\src
 pushd %current%
 @echo http://localhost:8897/
-%pythonexe% -c "import lightmlboard;lightmlboard.LightMLBoard.start_app()"
+%pythonexe% -c "import lightmlboard;lightmlboard.LightMLBoard.start_app(config='../bin/server_options.py')"
