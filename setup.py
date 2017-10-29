@@ -41,6 +41,7 @@ package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
 package_data = {
     project_var_name + ".static": ["*.js", "*.css", "*.ico", "*.png"],
     project_var_name + ".templates": ["*.html"],
+    project_var_name + ".data": ["*.txt"],
 }
 
 ############

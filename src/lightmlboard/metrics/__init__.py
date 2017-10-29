@@ -3,6 +3,7 @@
 @brief Implements metrics.
 """
 import sklearn.metrics as metrics
+from .classification import roc_auc_score_micro, roc_auc_score_macro
 from .regression import mse
 
 
@@ -16,6 +17,10 @@ def sklearn_metric(met, exp, val):
     @param      val     values
     @return             number
     """
+    if isinstance(val, str):
+        raise TypeError("val must be a container of floats")
+    if isinstance(exp, str):
+        raise TypeError("exp must be a container of floats")
     if hasattr(metrics, met):
         f = getattr(metrics, met)
         return f(exp, val)

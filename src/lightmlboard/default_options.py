@@ -3,6 +3,8 @@
 @file
 @brief Default options for the application.
 """
+import os
+from .competition import Competition
 
 
 class LightMLBoardDefaultOptions:
@@ -37,4 +39,15 @@ class LightMLBoardDefaultOptions:
 
     allowed_users = None
 
-    competitions = []
+    competitions = [Competition(
+        name="Prédiction de la présence d'additifs",
+        link="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/competition_2A.html#competition-2017-additifs-alimentaires",
+        expected_values=os.path.join(
+            os.path.dirname(__file__), "data", "dummy_prediction.txt"),
+        metric=["roc_auc_score_micro", "roc_auc_score_macro"],
+        description="""Le site OpenFoodFacts recense la composition de milliers de produits.
+                        La base de données peut être téléchargée (data). On veut savoir si les additifs ajoutés
+                        apparaissent plus fréquemment avec certains produits ou certaines compositions. Une façon
+                        est de prédire la présence d'additifs en fonction de toutes les autres variables.
+                        Si un modèle de prédiction fait mieux que le hasard, cela signifie que certaines
+                        corrélations existent. C'est un problème de classification binaire.""")]

@@ -5,6 +5,7 @@
 import pandas
 from .dbengine import Database
 from .options_helpers import read_options, read_users
+from .competition import Competition
 
 
 class DatabaseCompetition(Database):
@@ -18,6 +19,7 @@ class DatabaseCompetition(Database):
     * metric
     * datafile
     * description
+    * expected_values
 
     Teams
 
@@ -76,6 +78,7 @@ class DatabaseCompetition(Database):
         if opt is None:
             raise ValueError("No option in '{0}'.".format(filename))
         users = read_users(opt["allowed_users"])
+        competitions = [Competition(**d) for d in opt["competitions"]]
 
         if not self.has_rows("teams"):
             teams = map(lambda x: x[1]['team'], users.items())
@@ -97,6 +100,15 @@ class DatabaseCompetition(Database):
             pdf.to_sql("players", self.Connection,
                        if_exists="append", index=False)
 
+        if not self.has_rows("competitions"):
+            pdf = pandas.DataFrame(Competition.to_records(competitions))
+            pdf.reset_index(drop=False, inplace=True)
+            tdf = self.to_df("competitions")
+            pdf["cpt_id"] = pdf["index"]
+            pdf = pdf.drop("index", axis=1)
+            pdf.to_sql("competitions", self.Connection,
+                       if_exists="append", index=False)
+
     def to_df(self, table):
         """
         Returns the content of a table as a dataframe.
@@ -112,7 +124,8 @@ class DatabaseCompetition(Database):
         return self._connection
 
     def _col_competitions():
-        return [('cpt_id', int), ('cpt_name', str), ('metric', str), ('datafile', str), ('description', str)]
+        return [('cpt_id', int), ('cpt_name', str), ('metric', str), ('datafile', str), ('description', str),
+                ('expected_values', str), ('link', str)]
 
     def _col_teams():
         return [('team_id', int), ('team_name', str)]

@@ -87,10 +87,12 @@ class TestDb(ExtTestCase):
         db.connect()
         dft = db.to_df("teams")
         dfp = db.to_df("players")
+        dfc = db.to_df("competitions")
         db.close()
         self.assertEqual(dft.shape, (1, 2))
         self.assertEqual(dft.iloc[0, 1], "team1")
         self.assertEqual(dfp.shape, (1, 7))
+        self.assertEqual(dfc.shape, (1, 7))
 
 
 if __name__ == "__main__":

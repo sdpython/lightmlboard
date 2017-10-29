@@ -71,6 +71,39 @@ class TestMetrics(ExtTestCase):
         res = compet.evaluate([[0, 4, 2]])
         self.assertEqual(res, {'mean_squared_error': 3.0})
 
+    def test_roc_auc_score(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        compet = Competition("/compet", "compet1",
+                             "description", "roc_auc_score_micro", [0, 1, 0, 1])
+        res = compet.evaluate([[0, 1, 0, 1]])
+        self.assertEqual(res, {'roc_auc_score_micro': 1.0})
+        res = compet.evaluate(
+            [[0.1, 0.9], [0.1, 0.9], [0.1, 0.9], [0.9, 0.1]])
+        self.assertEqual(res, {'roc_auc_score_micro': 0.25})
+        res = compet.evaluate(
+            [[0.1, 0.9], [0.9, 0.1], [0.1, 0.9], [0.9, 0.1]])
+        self.assertEqual(res, {'roc_auc_score_micro': 0.0})
+        res = compet.evaluate(
+            [[0.9, 0.1], [0.1, 0.9], [0.9, 0.1], [0.1, 0.9]])
+        self.assertEqual(res, {'roc_auc_score_micro': 1.0})
+
+        compet = Competition("/compet", "compet1",
+                             "description", "roc_auc_score_macro", [0, 1, 0, 1])
+        res = compet.evaluate([0, 1, 0, 1])
+        self.assertEqual(res, {'roc_auc_score_macro': 1.0})
+        res = compet.evaluate(
+            [[0.1, 0.9], [0.1, 0.9], [0.1, 0.9], [0.9, 0.1]])
+        self.assertEqual(res, {'roc_auc_score_macro': 0.25})
+
+        compet = Competition("/compet", "compet1",
+                             "description", "roc_auc_score_micro", [0, 1, 0, 1])
+        res = compet.evaluate([[0.1, 0.9, 0.1, 0.9]])
+        self.assertEqual(res, {'roc_auc_score_micro': 1.0})
+
 
 if __name__ == "__main__":
     unittest.main()

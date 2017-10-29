@@ -3,7 +3,10 @@
 @file
 @brief Defines a competition.
 """
-from .metrics import mse, sklearn_metric
+import numpy
+import pandas
+from io import StringIO
+from .metrics import mse, sklearn_metric, roc_auc_score_macro, roc_auc_score_micro
 
 
 class Competition:
@@ -11,17 +14,17 @@ class Competition:
     Defines a competition.
     """
 
-    def __init__(self, link, name, description, metrics, expected_values=None):
+    def __init__(self, link, name, description, metric, expected_values=None):
         """
         @param      link                link to the page, something like ``/competition``
         @param      name                name of the competition
-        @param      metrics             list of metrics to compute
+        @param      metric              metric or list of metrics, list of metrics to compute
         @param      description         description
         @param      expected_values     expected values for each metric
         """
         self.link = link
         self.name = name
-        self.metrics = metrics if isinstance(metrics, list) else [metrics]
+        self.metrics = metric if isinstance(metric, list) else [metric]
         self.description = description
         self.expected_values = self._load_values(expected_values)
 
@@ -31,14 +34,22 @@ class Competition:
         one per metrics.
         """
         if isinstance(values, str):
-            import pandas
-            df = pandas.read_csv(values, header=None)
-            res = [df[df.columns[i]] for i in range(df.shape[1])]
+            res = pandas.read_csv(values, header=None)
+        elif isinstance(values, list):
+            if len(values) == 0:
+                raise ValueError("values cannot be empty")
+            if isinstance(values[0], dict):
+                res = pandas.DataFrame(values, header=None, dtype=float)
+            else:
+                res = pandas.DataFrame(numpy.array(values), dtype=float)
+                if res.shape[0] < res.shape[1]:
+                    res = res.T.reset_index(drop=True)
+            res.columns = ["exp%d" % i for i in range(res.shape[1])]
+        elif isinstance(values, pandas.DataFrame):
+            res = values
         else:
-            res = values if isinstance(values, list) else [values]
-        if len(res) != len(self.metrics):
-            raise ValueError("Wrong dimensions {0} != {1}.".format(
-                len(res), len(self.metrics)))
+            raise TypeError(
+                "Unexpected type for expected_values: {0}".format(type(values)))
         return res
 
     def evaluate(self, values):
@@ -50,8 +61,8 @@ class Competition:
         """
         res = {}
         values = self._load_values(values)
-        for met, exp, val in zip(self.metrics, self.expected_values, values):
-            res[met] = self.evalute_metric(met, exp, val)
+        for met in self.metrics:
+            res[met] = self.evalute_metric(met, self.expected_values, values)
         return res
 
     def evalute_metric(self, met, exp, val):
@@ -65,5 +76,25 @@ class Competition:
         """
         if met == "mse":
             return mse(exp, val)
+        elif met == "roc_auc_score_micro":
+            return roc_auc_score_micro(exp, val)
+        elif met == "roc_auc_score_macro":
+            return roc_auc_score_macro(exp, val)
         else:
             return sklearn_metric(met, exp, val)
+
+    @staticmethod
+    def to_records(list_cpt):
+        """
+        Converts a list of competitions into a list of dictionaries.
+        """
+        res = []
+        for cpt in list_cpt:
+            for met in cpt.metrics:
+                s = StringIO()
+                cpt.expected_values.to_csv(s, index=False)
+                val = s.getvalue()
+                d = dict(link=cpt.link, cpt_name=cpt.name, metric=met,
+                         description=cpt.description, expected_values=val)
+                res.append(d)
+        return res
