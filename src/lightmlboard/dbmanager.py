@@ -78,7 +78,9 @@ class DatabaseCompetition(Database):
         if opt is None:
             raise ValueError("No option in '{0}'.".format(filename))
         users = read_users(opt["allowed_users"])
-        competitions = [Competition(**d) for d in opt["competitions"]]
+        key = "tmpl_competitions" if "tmpl_competitions" in opt else "competitions"
+        competitions = [(d if isinstance(d, Competition)
+                         else Competition(**d)) for d in opt[key]]
 
         if not self.has_rows("teams"):
             teams = map(lambda x: x[1]['team'], users.items())
@@ -108,6 +110,12 @@ class DatabaseCompetition(Database):
             pdf = pdf.drop("index", axis=1)
             pdf.to_sql("competitions", self.Connection,
                        if_exists="append", index=False)
+
+    def get_competitions(self):
+        """
+        Returns the list of competitions as list of ``(cpt_id, cpt_name)``.
+        """
+        return self.execute("SELECT cpt_id, cpt_name FROM competitions")
 
     def to_df(self, table):
         """

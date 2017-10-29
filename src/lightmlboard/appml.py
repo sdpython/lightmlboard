@@ -9,9 +9,10 @@ import pprint
 from tornado.web import Application
 from tornado.web import StaticFileHandler
 from tornado.log import enable_pretty_logging
-from .handlersml import MainHandler, LoginHandler, LogoutHandler
+from .handlersml import MainHandler, LoginHandler, LogoutHandler, UploadData, SubmitForm
 from .default_options import LightMLBoardDefaultOptions
 from .options_helpers import read_options, read_users
+from .dbmanager import DatabaseCompetition
 
 
 class LightMLBoard(Application):
@@ -65,20 +66,20 @@ class LightMLBoard(Application):
         return context, app_options
 
     @staticmethod
-    def make_app(config=None, logged=None):
+    def make_app(config=None, logged=None, dbfile=":memory:"):
         """
         Creates a *LightMLBoard* application.
 
         @param      config      configuration file
         @param      logged      to log one user
+        @param      dbfile      file for the db file
         @return                 @see cl LightMLBoard
         """
         this = os.path.dirname(__file__)
         st = os.path.join(this, "static")
 
         # Update the context for static files.
-        updated_context = {}
-        updated_context.update({'path': st})
+        updated_context = {'path': st}
 
         # Options.
         config_options = read_options(config)
@@ -88,6 +89,14 @@ class LightMLBoard(Application):
             raise ValueError("No allowed users.\n{0}".format(
                 pprint.pformat(context)))
         users = read_users(allowed)
+
+        # db manager
+        if config is not None:
+            dbman = DatabaseCompetition(dbfile)
+            dbman.init_from_options(context)
+            context['dbman'] = dbman
+
+        # We remove the users.
         del context['allowed_users']
 
         # Specifies a logged user.
@@ -107,6 +116,8 @@ class LightMLBoard(Application):
             (r'/login', LoginHandler, context_users),
             (r'/logout', LogoutHandler, context),
             (r'/static/(.*)', StaticFileHandler, updated_context),
+            (r'/submit', SubmitForm, context),
+            (r'/upload', UploadData, context),
         ]
 
         args = dict(lang=local_context["lang"], debug=local_context['debug'])

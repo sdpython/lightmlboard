@@ -22,6 +22,9 @@ class _BaseRequestHandler(RequestHandler):
             # For unit test, we impose a logged user.
             self._logged_user = kwargs['ut_logged']['user']
             del kwargs['ut_logged']
+        if 'dbman' in kwargs:
+            self._db = kwargs['dbman']
+            del kwargs['dbman']
         RequestHandler.__init__(self, application, request, **kwargs)
         self._app_log = logging.getLogger("tornado.application")
 
@@ -112,6 +115,7 @@ class LogoutHandler(_TemplateHandler):
                                       kwargs.get('lang', 'fr')),
                                   request, **kwargs)
 
+    @tornado.web.authenticated
     def get(self):
         """
         Page.
@@ -212,3 +216,52 @@ class MainHandler(_TemplateHandler):
             self, application, "index.{0}.html".format(
                 kwargs.get('lang', 'fr')),
             request, **kwargs)
+
+
+class SubmitForm(_TemplateHandler):
+    """
+    Handlers for the form to upload dataset.
+    """
+
+    def __init__(self, application, request, **kwargs):
+        """
+        Constructor.
+        """
+        _TemplateHandler.__init__(
+            self, application, "submit.{0}.html".format(
+                kwargs.get('lang', 'fr')),
+            request, **kwargs)
+        val = self.get_argument('cpt_value', None)
+        if val is None:
+            raise ValueError(
+                "cpt_value is not defined in the list of arguments.")
+        self._tmpl_context['cpt_value'] = val
+        self._tmpl_context['cptidname'] = self._db.get_competitions()
+
+
+class UploadData(_TemplateHandler):
+    """
+    Upload data.
+    """
+    """
+    Handlers for the form to upload dataset.
+    """
+
+    def __init__(self, application, request, **kwargs):
+        """
+        Constructor.
+        """
+        _TemplateHandler.__init__(
+            self, application, "waiting.{0}.html".format(
+                kwargs.get('lang', 'fr')),
+            request, **kwargs)
+        self._tmpl_context['waitgif'] = "/static/giphy.gif"
+
+    @tornado.gen.coroutine
+    def post(self):
+        fileinfo = self.request.files['filearg'][0]
+        self.info("fileinfo={0}".format(fileinfo))
+        fname = fileinfo['filename']
+        self.info("filename='{0}'".format(fname))
+        content = fileinfo['body']
+        self.info("downloaded size={0}".format(len(content)))

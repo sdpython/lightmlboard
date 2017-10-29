@@ -24,7 +24,9 @@ class Competition:
         """
         self.link = link
         self.name = name
-        self.metrics = metric if isinstance(metric, list) else [metric]
+        if isinstance(metric, str):
+            metric = metric.split(',')
+        self.metrics = metric
         self.description = description
         self.expected_values = self._load_values(expected_values)
 
@@ -82,6 +84,17 @@ class Competition:
             return roc_auc_score_macro(exp, val)
         else:
             return sklearn_metric(met, exp, val)
+
+    def to_dict(self):
+        """
+        Convert a competition into a dictionary.
+        """
+        s = StringIO()
+        self.expected_values.to_csv(s, index=False)
+        val = s.getvalue()
+        return dict(link=self.link, name=self.name,
+                    description=self.description, expected_values=val,
+                    metric=",".join(self.metrics))
 
     @staticmethod
     def to_records(list_cpt):
