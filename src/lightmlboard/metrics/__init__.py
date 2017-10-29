@@ -3,7 +3,7 @@
 @brief Implements metrics.
 """
 import sklearn.metrics as metrics
-from .classification import roc_auc_score_micro, roc_auc_score_macro
+from .classification import roc_auc_score_micro, roc_auc_score_macro, reshape
 from .regression import mse
 
 
@@ -23,6 +23,7 @@ def sklearn_metric(met, exp, val):
         raise TypeError("exp must be a container of floats")
     if hasattr(metrics, met):
         f = getattr(metrics, met)
+        exp, val = reshape(exp, val)
         return f(exp, val)
     else:
         raise AttributeError("Unable to find metric '{0}'.".format(met))

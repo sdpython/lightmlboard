@@ -6,6 +6,8 @@
 import sys
 import os
 import unittest
+import pandas
+from io import StringIO
 
 
 try:
@@ -88,11 +90,47 @@ class TestDb(ExtTestCase):
         dft = db.to_df("teams")
         dfp = db.to_df("players")
         dfc = db.to_df("competitions")
+        dfs = db.to_df("submissions")
         db.close()
         self.assertEqual(dft.shape, (1, 2))
         self.assertEqual(dft.iloc[0, 1], "team1")
         self.assertEqual(dfp.shape, (1, 7))
         self.assertEqual(dfc.shape, (1, 7))
+        self.assertEqual(dfs.shape, (1, 7))
+
+    def test_submission(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
+        fname = os.path.join(data, "off_eval_all_Y.txt")
+        df = pandas.read_csv(fname)
+        pred = [0.9 if v else 0.1 for v in df.hasE]
+        dfpred = pandas.DataFrame(pred, columns=["c1"])
+        s = StringIO()
+        dfpred.to_csv(s, index=False)
+        sub = s.getvalue()
+
+        db = DatabaseCompetition(":memory:")
+        opt = os.path.join(data, "ex_default_options.py")
+        db.init_from_options(opt)
+        db.connect()
+
+        cid = db.get_cpt_id()
+        pid = db.get_player_id()
+
+        db.submit(cid[0], pid[0], sub)
+        db.close()
+
+        db.connect()
+        subs = list(db.execute("SELECT * FROM submissions"))
+        db.close()
+
+        self.assertEqual(len(subs), 2)
+        self.assertEqual(
+            subs[-1][-2:], ('mean_squared_error', 0.009999999999999997))
 
 
 if __name__ == "__main__":

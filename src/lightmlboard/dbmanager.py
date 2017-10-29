@@ -2,7 +2,10 @@
 @file
 @brief Manages a sqlite3 database to store the results.
 """
+import datetime
+import numpy
 import pandas
+from uuid import uuid4
 from .dbengine import Database
 from .options_helpers import read_options, read_users
 from .competition import Competition
@@ -111,6 +114,12 @@ class DatabaseCompetition(Database):
             pdf.to_sql("competitions", self.Connection,
                        if_exists="append", index=False)
 
+        if not self.has_rows("submissions"):
+            pdf = DatabaseCompetition._dummy_submissions()
+            pdf.reset_index(drop=True, inplace=True)
+            pdf.to_sql("submissions", self.Connection,
+                       if_exists="append", index=False)
+
     def get_competitions(self):
         """
         Returns the list of competitions as list of ``(cpt_id, cpt_name)``.
@@ -131,17 +140,79 @@ class DatabaseCompetition(Database):
         self._check_connection()
         return self._connection
 
+    @staticmethod
     def _col_competitions():
         return [('cpt_id', int), ('cpt_name', str), ('metric', str), ('datafile', str), ('description', str),
                 ('expected_values', str), ('link', str)]
 
+    @staticmethod
     def _col_teams():
         return [('team_id', int), ('team_name', str)]
 
+    @staticmethod
     def _col_players():
         return [('player_id', int), ('team_id', int), ('metric', str), ('player_name', str),
                 ('mail', str), ('login', str), ('pwd', str)]
 
+    @staticmethod
     def _col_submissions():
-        return [('cpt_id', int), ('player_id', int), ('date', str),
-                ('filename', str), ('metric_value', str)]
+        return [('sub_id', str), ('cpt_id', int), ('player_id', int), ('date', str),
+                ('data', str), ('metric', str), ('metric_value', float)]
+
+    @staticmethod
+    def _dummy_submissions():
+        return pandas.DataFrame([dict(sub_id=str(uuid4()), cpt_id=-1, player_id=-1, date=datetime.datetime.now(),
+                                      data='', metric='rse', metric_value=numpy.nan)])
+
+    def get_cpt_id(self):
+        """
+        Returns the list of competation id.
+        """
+        return list(_[0] for _ in self.execute("SELECT cpt_id FROM competitions"))
+
+    def get_player_id(self):
+        """
+        Returns the list of competation id.
+        """
+        return list(_[0] for _ in self.execute("SELECT player_id FROM players"))
+
+    def submit(self, cpt_id, player_id, data, date=datetime.datetime.now()):
+        """
+        Adds a submission to the database.
+
+        @param      cpt_id          competition id
+        @param      player_id       player who did the submission
+        @param      data            data of the submission
+
+        The function computes the metric associated to the submission.
+        """
+        if not isinstance(data, str):
+            raise TypeError("data must be str not {0}".format(type(data)))
+        cp = list(self.execute(
+            "SELECT cpt_id, metric, expected_values FROM competitions WHERE cpt_id={0}".format(cpt_id)))
+        if len(cp) == 0:
+            raise ValueError("Unable to find cpt_id={0} in\n{1}".format(
+                cpt_id, self.get_cpt_id()))
+        pid = list(self.execute(
+            "SELECT player_id FROM players WHERE player_id={0}".format(player_id)))
+        if len(pid) == 0:
+            raise ValueError("Unable to find player_id={0} in\n{1}".format(
+                player_id, self.get_player_id()))
+        metrics = [_[1:] for _ in cp]
+
+        sub = []
+        for met, exp in metrics:
+            cp = Competition(link='', name='', description='',
+                             metric=met, expected_values=exp)
+            dres = cp.evaluate(data)
+            res = dres[met]
+            if not isinstance(res, float):
+                res = float(res)
+            rec = dict(sub_id=str(uuid4()), cpt_id=cpt_id, player_id=player_id,
+                       data=data, metric=met, metric_value=res)
+            sub.append(rec)
+
+        df = pandas.DataFrame(sub)
+        df.to_sql("submissions", self._connection,
+                  if_exists="append", index=False)
+        self.commit()

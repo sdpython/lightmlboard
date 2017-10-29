@@ -29,6 +29,12 @@ class Database:
         self._sql_file = dbfile
         self._connection = None
 
+    def get_file(self):
+        """
+        Returns the file name.
+        """
+        return self._sql_file
+
     def _check_connection(self):
         """
         Check the SQL connection.

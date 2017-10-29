@@ -68,10 +68,10 @@ class Competition:
         res = {}
         values = self._load_values(values)
         for met in self.metrics:
-            res[met] = self.evalute_metric(met, self.expected_values, values)
+            res[met] = self.evaluate_metric(met, self.expected_values, values)
         return res
 
-    def evalute_metric(self, met, exp, val):
+    def evaluate_metric(self, met, exp, val):
         """
         Evaluates a metric.
 
