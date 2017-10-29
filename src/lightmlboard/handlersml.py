@@ -110,10 +110,8 @@ class LogoutHandler(_TemplateHandler):
 
         * tmpl_title: application title
         """
-        _TemplateHandler.__init__(self, application,
-                                  "logout.{0}.html".format(
-                                      kwargs.get('lang', 'fr')),
-                                  request, **kwargs)
+        _TemplateHandler.__init__(
+            self, application, "unused", request, **kwargs)
 
     @tornado.web.authenticated
     def get(self):

@@ -36,7 +36,11 @@ class Competition:
         one per metrics.
         """
         if isinstance(values, str):
-            res = pandas.read_csv(values, header=None)
+            if '\n' in values:
+                st = StringIO(values)
+                res = pandas.read_csv(st)
+            else:
+                res = pandas.read_csv(values)
         elif isinstance(values, list):
             if len(values) == 0:
                 raise ValueError("values cannot be empty")
