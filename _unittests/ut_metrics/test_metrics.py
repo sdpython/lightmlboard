@@ -51,8 +51,9 @@ class TestMetrics(ExtTestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        compet = Competition("/compet", "compet1",
-                             "description", "mse", [[0, 1, 2]])
+        compet = Competition(0, link="/compet", name="compet1",
+                             description="description", metric="mse",
+                             expected_values=[[0, 1, 2]])
         res = compet.evaluate([[0, 1, 2]])
         self.assertEqual(res, {'mse': 0.0})
         res = compet.evaluate([[0, 4, 2]])
@@ -64,8 +65,9 @@ class TestMetrics(ExtTestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        compet = Competition("/compet", "compet1",
-                             "description", "mean_squared_error", [[0, 1, 2]])
+        compet = Competition(0, link="/compet", name="compet1",
+                             description="description", metric="mean_squared_error",
+                             expected_values=[[0, 1, 2]])
         res = compet.evaluate([[0, 1, 2]])
         self.assertEqual(res, {'mean_squared_error': 0.0})
         res = compet.evaluate([[0, 4, 2]])
@@ -77,8 +79,9 @@ class TestMetrics(ExtTestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        compet = Competition("/compet", "compet1",
-                             "description", "roc_auc_score_micro", [0, 1, 0, 1])
+        compet = Competition(0, link="/compet", name="compet1",
+                             description="description", metric="roc_auc_score_micro",
+                             expected_values=[0, 1, 0, 1])
         res = compet.evaluate([[0, 1, 0, 1]])
         self.assertEqual(res, {'roc_auc_score_micro': 1.0})
         res = compet.evaluate(
@@ -91,16 +94,18 @@ class TestMetrics(ExtTestCase):
             [[0.9, 0.1], [0.1, 0.9], [0.9, 0.1], [0.1, 0.9]])
         self.assertEqual(res, {'roc_auc_score_micro': 1.0})
 
-        compet = Competition("/compet", "compet1",
-                             "description", "roc_auc_score_macro", [0, 1, 0, 1])
+        compet = Competition(0, link="/compet", name="compet1",
+                             description="description", metric="roc_auc_score_macro",
+                             expected_values=[0, 1, 0, 1])
         res = compet.evaluate([0, 1, 0, 1])
         self.assertEqual(res, {'roc_auc_score_macro': 1.0})
         res = compet.evaluate(
             [[0.1, 0.9], [0.1, 0.9], [0.1, 0.9], [0.9, 0.1]])
         self.assertEqual(res, {'roc_auc_score_macro': 0.25})
 
-        compet = Competition("/compet", "compet1",
-                             "description", "roc_auc_score_micro", [0, 1, 0, 1])
+        compet = Competition(0, link="/compet", name="compet1",
+                             description="description", metric="roc_auc_score_micro",
+                             expected_values=[0, 1, 0, 1])
         res = compet.evaluate([[0.1, 0.9, 0.1, 0.9]])
         self.assertEqual(res, {'roc_auc_score_micro': 1.0})
 

@@ -14,19 +14,25 @@ class Competition:
     Defines a competition.
     """
 
-    def __init__(self, link, name, description, metric, expected_values=None):
+    def __init__(self, cpt_id, link, name, description, metric, datafile=None, expected_values=None):
         """
+        @param      cpt_id              competition id
         @param      link                link to the page, something like ``/competition``
         @param      name                name of the competition
         @param      metric              metric or list of metrics, list of metrics to compute
         @param      description         description
+        @param      datafile            data file
         @param      expected_values     expected values for each metric
         """
         self.link = link
         self.name = name
+        self.cpt_id = cpt_id
         if isinstance(metric, str):
             metric = metric.split(',')
+        if not isinstance(metric, list):
+            metric = [metric]
         self.metrics = metric
+        self.datafile = datafile
         self.description = description
         self.expected_values = self._load_values(expected_values)
 
@@ -40,6 +46,8 @@ class Competition:
                 st = StringIO(values)
                 res = pandas.read_csv(st)
             else:
+                if self.datafile is None:
+                    self.datafile = values
                 res = pandas.read_csv(values)
         elif isinstance(values, list):
             if len(values) == 0:
@@ -89,6 +97,13 @@ class Competition:
         else:
             return sklearn_metric(met, exp, val)
 
+    @property
+    def metric(self):
+        """
+        Returns the metrics in a single string.
+        """
+        return ",".join(self.metrics)
+
     def to_dict(self):
         """
         Convert a competition into a dictionary.
@@ -96,9 +111,9 @@ class Competition:
         s = StringIO()
         self.expected_values.to_csv(s, index=False)
         val = s.getvalue()
-        return dict(link=self.link, name=self.name,
+        return dict(cpt_id=self.cpt_id, link=self.link, name=self.name,
                     description=self.description, expected_values=val,
-                    metric=",".join(self.metrics))
+                    metric=",".join(self.metrics), datafile=self.datafile)
 
     @staticmethod
     def to_records(list_cpt):

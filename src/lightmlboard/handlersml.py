@@ -186,7 +186,13 @@ class LoginHandler(_TemplateHandler):
             self.get_argument("password"))
         self.info("login='{0}'".format(getusername))
         self.info("nb users={0}".format(len(self._users)))
-        if getusername in self._users and getpassword == self._users[getusername]:
+        if getusername in self._users:
+            val = self._users[getusername]
+            if isinstance(val, dict):
+                goodpwd = val['pwd'] == getpassword
+            else:
+                goodpwd = self._users[getusername] == getpassword
+        if goodpwd:
             self.set_current_user(getusername)
             self.set_secure_cookie("incorrect", "0")
             self.redirect("/")
@@ -197,7 +203,7 @@ class LoginHandler(_TemplateHandler):
             self.set_current_user(None)
             self.write("""<center>
                             Something Wrong With Login<br />
-                            <a href="/login">Go Home</a>
+                            <a href="/login">Try Again</a>
                           </center>""")
 
 
@@ -263,3 +269,24 @@ class UploadData(_TemplateHandler):
         self.info("filename='{0}'".format(fname))
         content = fileinfo['body']
         self.info("downloaded size={0}".format(len(content)))
+
+
+class CompetitionHandler(_TemplateHandler):
+    """
+    Handlers for the page on competitions.
+    """
+
+    def __init__(self, application, request, **kwargs):
+        """
+        Constructor.
+        """
+        _TemplateHandler.__init__(
+            self, application, "challenge.{0}.html".format(
+                kwargs.get('lang', 'fr')),
+            request, **kwargs)
+        val = self.get_argument('cpt_id', None)
+        if val is None:
+            raise ValueError(
+                "cpt_id is not defined in the list of arguments.")
+        self._tmpl_context['cpt'] = self._db.get_competition(val)
+        self._tmpl_context['results'] = self._db.get_results(val)

@@ -31,6 +31,14 @@
             <div class="explanation" id="zen-explanation" role="article">
                 <h2>{{title_main}}</h2>
                 <p>{% raw description_main %}</p>
+                <p>
+                <ul>
+                {% for item in competitions %}
+                <li><a href="/competition?cpt_id={{item.cpt_id}}" 
+            class="design-name">{{item.name}}</a></li>
+                {% end for %}
+                </ul>                
+                </p>
             </div>
 
             <footer>
@@ -43,15 +51,10 @@
             <div class="wrapper">
                 <div class="design-selection" id="design-selection">
                     <nav role="navigation">
-                        <ul>
-                        <li><a href="login" class="design-name">Login</a></li>
-                        {% for item in competitions %}
-                        <li><a href="{{item.link}}" class="design-name">{{item.name}}</a></li>
-                        {% end for %}
-                        <li><a href="/logout">logout</a></li>
-                        </ul>
+
                         <p class="cookies"><i>Le site utilise des cookies.</i></p>
-                        <p class="userclass">User: <i>{{ current_user['user'] }}</i></p>
+                        <p class="userclass"><i>{{ current_user['user'].strip('"') }}</i>
+                            <a href="/logout">logout</a></p>
                     </nav>
                 </div>
             </div>

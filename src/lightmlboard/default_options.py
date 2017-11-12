@@ -40,6 +40,7 @@ class LightMLBoardDefaultOptions:
     allowed_users = None
 
     competitions = [Competition(
+        cpt_id=0,
         name="Prédiction de la présence d'additifs",
         link="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/competition_2A.html#competition-2017-additifs-alimentaires",
         expected_values=os.path.join(

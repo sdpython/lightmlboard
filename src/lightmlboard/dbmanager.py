@@ -107,10 +107,13 @@ class DatabaseCompetition(Database):
 
         if not self.has_rows("competitions"):
             pdf = pandas.DataFrame(Competition.to_records(competitions))
-            pdf.reset_index(drop=False, inplace=True)
-            tdf = self.to_df("competitions")
-            pdf["cpt_id"] = pdf["index"]
-            pdf = pdf.drop("index", axis=1)
+            if "cpt_id" in pdf.columns:
+                pdf.reset_index(drop=True, inplace=True)
+            else:
+                pdf.reset_index(drop=False, inplace=True)
+                # tdf = self.to_df("competitions")
+                pdf["cpt_id"] = pdf["index"]
+                pdf = pdf.drop("index", axis=1)
             pdf.to_sql("competitions", self.Connection,
                        if_exists="append", index=False)
 
@@ -119,6 +122,11 @@ class DatabaseCompetition(Database):
             pdf.reset_index(drop=True, inplace=True)
             pdf.to_sql("submissions", self.Connection,
                        if_exists="append", index=False)
+
+        df = self.to_df("players")
+        logins = set(df['login'])
+        if None in logins:
+            raise ValueError("One login is wrong: {0}".format(logins))
 
     def get_competitions(self):
         """
@@ -142,8 +150,8 @@ class DatabaseCompetition(Database):
 
     @staticmethod
     def _col_competitions():
-        return [('cpt_id', int), ('cpt_name', str), ('metric', str), ('datafile', str), ('description', str),
-                ('expected_values', str), ('link', str)]
+        return [('cpt_id', int), ('link', str), ('cpt_name', str), ('description', str),
+                ('metric', str), ('datafile', str), ('expected_values', str)]
 
     @staticmethod
     def _col_teams():
@@ -202,7 +210,7 @@ class DatabaseCompetition(Database):
 
         sub = []
         for met, exp in metrics:
-            cp = Competition(link='', name='', description='',
+            cp = Competition(cpt_id=0, link='', name='', description='',
                              metric=met, expected_values=exp)
             dres = cp.evaluate(data)
             res = dres[met]
@@ -216,3 +224,35 @@ class DatabaseCompetition(Database):
         df.to_sql("submissions", self._connection,
                   if_exists="append", index=False)
         self.commit()
+
+    def get_competition(self, cpt_id):
+        """
+        Retrieves a competition.
+
+        @param      cpt_id  competition id
+        @return             @see cl Competition
+        """
+        res = list(self.execute(
+            "SELECT * FROM competitions WHERE cpt_id=={0}".format(cpt_id)))
+        if len(res) == 0:
+            raise KeyError("No competition for cpt_id=={0}".format(cpt_id))
+        if len(res) != 1:
+            raise KeyError(
+                "Too many competitions for cpt_id=={0}".format(cpt_id))
+        args = list(res[0])
+        return Competition(*args)
+
+    def get_results(self, cpt_id):
+        """
+        Retrieves the results of a competition.
+
+        @param      cpt_id  competition id
+        @return             a data frame
+        """
+        res = pandas.read_sql("""SELECT A.*, B.player_name AS player_name, C.team_name
+                                 FROM submissions AS A
+                                 INNER JOIN players AS B ON A.player_id == B.player_id
+                                 INNER JOIN teams AS C ON B.team_id == C.team_id
+                                 WHERE cpt_id == {0}
+                                 """.format(cpt_id), self.Connection)
+        return res

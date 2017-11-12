@@ -60,6 +60,13 @@ based on :epkg:`tornado`.
     blog/blogindex
     index_modules
 
+You can start the web application by running:
+
+::
+
+    import lightmlboard
+    lightmlboard.LightMLBoard.start_app(config='server_options.py', port=8897)
+
 **Links:** `github <https://github.com/sdpython/lightmlboard/>`_,
 `documentation <http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/index.html>`_,
 :ref:`l-README`,

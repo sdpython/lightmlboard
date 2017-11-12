@@ -43,6 +43,7 @@ except ImportError:
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
 from src.lightmlboard.dbmanager import DatabaseCompetition
+from src.lightmlboard.competition import Competition
 
 
 class TestDb(ExtTestCase):
@@ -131,6 +132,48 @@ class TestDb(ExtTestCase):
         self.assertEqual(len(subs), 2)
         self.assertEqual(
             subs[-1][-2:], ('mean_squared_error', 0.009999999999999997))
+
+    def test_get_competition(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        db = DatabaseCompetition(":memory:")
+        data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
+        opt = os.path.join(data, "ex_default_options.py")
+        db.init_from_options(opt)
+        db.connect()
+        cpt = db.get_competition(0)
+        db.close()
+        self.assertIsInstance(cpt, Competition)
+
+    def test_get_results(self):
+        fLOG(
+            __file__,
+            self._testMethodName,
+            OutputPrint=__name__ == "__main__")
+
+        db = DatabaseCompetition(":memory:")
+        data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
+        opt = os.path.join(data, "ex_default_options.py")
+        db.init_from_options(opt)
+        db.connect()
+
+        data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
+        fname = os.path.join(data, "off_eval_all_Y.txt")
+        df = pandas.read_csv(fname)
+        pred = [0.9 if v else 0.1 for v in df.hasE]
+        dfpred = pandas.DataFrame(pred, columns=["c1"])
+        s = StringIO()
+        dfpred.to_csv(s, index=False)
+        sub = s.getvalue()
+        db.submit(0, 0, sub)
+
+        df = db.get_results(0)
+        db.close()
+        self.assertIsInstance(df, pandas.DataFrame)
+        self.assertEqual(df.shape, (1, 9))
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ import pprint
 from tornado.web import Application
 from tornado.web import StaticFileHandler
 from tornado.log import enable_pretty_logging
-from .handlersml import MainHandler, LoginHandler, LogoutHandler, UploadData, SubmitForm
+from .handlersml import MainHandler, LoginHandler, LogoutHandler, UploadData, SubmitForm, CompetitionHandler
 from .default_options import LightMLBoardDefaultOptions
 from .options_helpers import read_options, read_users
 from .dbmanager import DatabaseCompetition
@@ -34,7 +34,7 @@ class LightMLBoard(Application):
         Application.__init__(self, handlers=handlers, default_host=default_host,
                              transforms=transforms, **settings)
         app_log = logging.getLogger("tornado.application")
-        app_log.info('[LightMLBoard] {0}'.format(settings))
+        app_log.info('[LightMLBoard] Settings: {0}'.format(settings))
 
     def update_options(config_options):
         """
@@ -118,6 +118,7 @@ class LightMLBoard(Application):
             (r'/static/(.*)', StaticFileHandler, updated_context),
             (r'/submit', SubmitForm, context),
             (r'/upload', UploadData, context),
+            (r'/competition', CompetitionHandler, context),
         ]
 
         args = dict(lang=local_context["lang"], debug=local_context['debug'])

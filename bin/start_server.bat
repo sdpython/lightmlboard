@@ -14,5 +14,6 @@ set pythonexe=c:\Python36_x64\python
 :start_script:
 set current=%~dp0..\src
 pushd %current%
-@echo http://localhost:8897/
-%pythonexe% -c "import lightmlboard;lightmlboard.LightMLBoard.start_app(config='../bin/server_options.py')"
+set portpy=8882
+@echo http://localhost:%portpy%/
+%pythonexe% -c "import lightmlboard;lightmlboard.LightMLBoard.start_app(config='../bin/server_options.py', port=%portpy%)"

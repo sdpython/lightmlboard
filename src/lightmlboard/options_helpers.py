@@ -59,9 +59,10 @@ def read_users(filename):
             "Users should be defined in CSV file with columns: {0}, not {1}".format(exp, has))
     users = {}
     for i in range(0, df.shape[0]):
-        name, login, mail, pwd, team = df.loc[i, 'name'], df.loc[i,
-                                                                 'login'], df.loc[i, 'mail'], df.loc[i, 'pwd'], df.loc[i, 'team']
+        name, login, mail, pwd, team = (df.loc[i, 'name'], df.loc[i, 'login'],
+                                        df.loc[i, 'mail'], df.loc[i, 'pwd'], df.loc[i, 'team'])
         if login in users:
             raise ValueError("Duplicated user: '{0}'.".format(login))
-        users[login] = dict(mail=mail, pwd=pwd, team=team, name=name)
+        users[login] = dict(mail=mail, pwd=pwd, team=team,
+                            name=name, login=login)
     return users
