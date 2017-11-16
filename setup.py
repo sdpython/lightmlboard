@@ -18,7 +18,7 @@ history = "HISTORY.rst"
 requirements = None
 
 KEYWORDS = project_var_name + ', Xavier Dupré'
-DESCRIPTION = """Module with C functions. No precise purpose yet."""
+DESCRIPTION = """Light web server serving pages on a leaderboard for machine learned competitions"""
 
 
 CLASSIFIERS = [
