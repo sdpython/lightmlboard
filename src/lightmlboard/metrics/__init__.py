@@ -5,6 +5,7 @@
 import sklearn.metrics as metrics
 from .classification import roc_auc_score_micro, roc_auc_score_macro, reshape
 from .regression import mse
+from .regression_custom import l1_reg_max
 
 
 def sklearn_metric(met, exp, val):
