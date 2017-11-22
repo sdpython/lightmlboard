@@ -66,3 +66,38 @@ def roc_auc_score_macro(exp, val):
     """
     exp, val = reshape(exp, val)
     return roc_auc_score(exp, val, average="macro")
+
+
+def multi_label_jaccard(exp, val):
+    """
+    Applies to a multi-label classification problem.
+    Computes the average Jaccard index between two sequences
+    of sets of labels
+    (see `Multi-label classification <https://en.wikipedia.org/wiki/Multi-label_classification>`_).
+
+    @param      exp     list of tuple or list or set or string (comma separated values)
+    @param      val     list of tuple or list or set or string (comma separated values)
+    @return             score
+
+    .. math::
+
+        E = \\frac{1}{n} \\sum_{i=1}^n \\frac{|C_i \\cap P_i|}{|C_i \\cup P_i|}
+    """
+    if len(exp) != len(val):
+        raise ValueError(
+            "Dimension mismatch {0} != {1}".format(len(exp), len(val)))
+
+    def to_set(v):
+        if isinstance(v, set):
+            return v
+        elif isinstance(v, str):
+            return set(v.split(','))
+        else:
+            return set(v)
+
+    r = 0.0
+    for e, v in zip(exp, val):
+        es = to_set(e)
+        vs = to_set(v)
+        r += float(len(es & vs)) / len(es.union(vs))
+    return r / len(exp)
