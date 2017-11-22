@@ -7,6 +7,19 @@ import numpy
 
 def l1_reg_max(exp, val, max_val=180):
     """
+    Implements a :epkg:`L1` scoring function which does not consider
+    error above threshold *max_val*.
+
+    @param      exp     list of values or :epkg:`numpy:array`
+    @param      val     list of values or :epkg:`numpy:array`
+    @return             score
+
+    .. math::
+
+        E = \frac{1}{n} \sum_{i=1}{n}  \frac{\min \left| Y_i - \min f(X_i) \right|}{180}
+
+    The computation is faster is :epkg:`numpy:array` are used
+    (for *exp* and *val*).
     """
     if isinstance(exp, numpy.ndarray) and isinstance(val, numpy.ndarray):
         an = numpy.zeros((len(exp),))

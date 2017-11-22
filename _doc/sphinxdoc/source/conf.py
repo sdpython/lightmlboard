@@ -43,3 +43,5 @@ html_sidebars = {}
 language = "en"
 
 mathdef_link_only = True
+
+epkg_dictionary['L1'] = "https://en.wikipedia.org/wiki/Least_absolute_deviations"
