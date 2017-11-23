@@ -97,8 +97,8 @@ class TestMetricsCustom(ExtTestCase):
         val = [50, 60, 100, 180, 180]
         d1 = pandas.DataFrame(dict(name=exp)).reset_index(drop=False)
         d2 = pandas.DataFrame(dict(name=val)).reset_index(drop=False)
-        d1.to_csv(st1, index=False, header=None)
-        d2.to_csv(st2, index=False, header=None)
+        d1.to_csv(st1, index=False, header=None, sep=';')
+        d2.to_csv(st2, index=False, header=None, sep=';')
         r = l1_reg_max(io.StringIO(st1.getvalue()),
                        io.StringIO(st2.getvalue()))
         self.assertEqual(r, 0)
@@ -141,8 +141,8 @@ class TestMetricsCustom(ExtTestCase):
         val = ["4", "5", "7", "7", "7", "7,6"]
         d1 = pandas.DataFrame(dict(name=exp)).reset_index(drop=False)
         d2 = pandas.DataFrame(dict(name=val)).reset_index(drop=False)
-        d1.to_csv(st1, index=False, header=None)
-        d2.to_csv(st2, index=False, header=None)
+        d1.to_csv(st1, index=False, header=None, sep=';')
+        d2.to_csv(st2, index=False, header=None, sep=';')
         r = multi_label_jaccard(io.StringIO(st1.getvalue()),
                                 io.StringIO(st2.getvalue()))
         self.assertEqual(r, 0.75)

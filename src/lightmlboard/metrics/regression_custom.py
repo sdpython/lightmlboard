@@ -54,8 +54,8 @@ def l1_reg_max(exp, val, max_val=180):
         return r / len(exp)
     elif isinstance(exp, (str, io.StringIO)) and isinstance(val, (str, io.StringIO)):
         # We expect filenames.
-        d1 = pandas.read_csv(exp, header=None)
-        d2 = pandas.read_csv(val, header=None)
+        d1 = pandas.read_csv(exp, header=None, sep=";")
+        d2 = pandas.read_csv(val, header=None, sep=";")
         dd1 = {}
         for k, v in d1.itertuples(name=None, index=False):
             if k in dd1:
