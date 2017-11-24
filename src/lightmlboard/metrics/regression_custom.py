@@ -20,7 +20,7 @@ def l1_reg_max(exp, val, max_val=180):
 
     .. math::
 
-        E = \\frac{1}{n} \\sum_{i=1}^n \\frac{\\min \\left| Y_i - \\min(f(X_i), 180) \\right|}{180}
+        E = \\frac{1}{n} \\sum_{i=1}^n \\frac{\\left| \\min (Y_i, 180) - \\min(f(X_i), 180) \\right|}{180}
 
     The computation is faster if :epkg:`numpy:array` are used
     (for *exp* and *val*). *exp and *val* can be filenames or streams.
