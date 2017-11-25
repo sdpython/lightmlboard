@@ -111,8 +111,9 @@ def multi_label_jaccard(exp, val):
         return multi_label_jaccard(dd1, dd2)
     elif isinstance(exp, dict) and isinstance(val, dict):
         if len(exp) != len(val):
+            number_common = len(set(exp) & set(val))
             raise ValueError(
-                "Dimension mismatch {0} != {1}".format(len(exp), len(val)))
+                "Dimension mismatch {0} != {1} (#common={2})".format(len(exp), len(val), number_common))
         r = 0.0
         for k, e in exp.items():
             if k in val:

@@ -39,8 +39,9 @@ def l1_reg_max(exp, val, max_val=180):
         return df.mean()
     elif isinstance(exp, dict) and isinstance(val, dict):
         if len(exp) != len(val):
+            number_common = len(set(exp) & set(val))
             raise ValueError(
-                "Dimension mismatch {0} != {1}".format(len(exp), len(val)))
+                "Dimension mismatch {0} != {1} (#common={2})".format(len(exp), len(val), number_common))
         r = 0.0
         for k, e in exp.items():
             if k in val:
