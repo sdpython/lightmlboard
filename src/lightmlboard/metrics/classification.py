@@ -69,21 +69,21 @@ def roc_auc_score_macro(exp, val):
     return roc_auc_score(exp, val, average="macro")
 
 
-def multi_label_jaccard(exp, val):
+def multi_label_jaccard(exp, val, exc=True):
     """
     Applies to a multi-label classification problem.
     Computes the average Jaccard index between two sequences
     of sets of labels
     (see `Multi-label classification <https://en.wikipedia.org/wiki/Multi-label_classification>`_).
 
-    @param      exp     list of tuple or list of set or filename or streams (comma separated values) or dict
-    @param      val     list of tuple or list of set or filename or streams (comma separated values) or dict
-    @return             score
+    @param      exp         list of tuple or list of set or filename or streams (comma separated values) or dict
+    @param      val         list of tuple or list of set or filename or streams (comma separated values) or dict
+    @param      exc         raises an exception if not enough submitted items
+    @return                 score
 
     .. math::
 
         E = \\frac{1}{n} \\sum_{i=1}^n \\frac{|C_i \\cap P_i|}{|C_i \\cup P_i|}
-
 
     """
     def to_set(v):
@@ -91,6 +91,8 @@ def multi_label_jaccard(exp, val):
             return v
         elif isinstance(v, str):
             return set(v.split(','))
+        elif isinstance(v, (float, int)):
+            return {str(v)}
         else:
             return set(v)
 
@@ -101,20 +103,21 @@ def multi_label_jaccard(exp, val):
         dd1 = {}
         for k, v in d1.itertuples(name=None, index=False):
             if k in dd1:
-                raise KeyError("Key '{}' already present".format(k))
+                raise KeyError("Key '{}' present at least twice.".format(k))
             dd1[k] = v
         dd2 = {}
         for k, v in d2.itertuples(name=None, index=False):
             if k in dd2:
-                raise KeyError("Key '{}' already present".format(k))
+                raise KeyError("Key '{}' present at least twice.".format(k))
             dd2[k] = v
-        return multi_label_jaccard(dd1, dd2)
+        return multi_label_jaccard(dd1, dd2, exc=exc)
     elif isinstance(exp, dict) and isinstance(val, dict):
-        if len(exp) != len(val):
+        if exc and len(exp) != len(val):
             number_common = len(set(exp) & set(val))
             raise ValueError(
                 "Dimension mismatch {0} != {1} (#common={2})".format(len(exp), len(val), number_common))
         r = 0.0
+        missing = 0
         for k, e in exp.items():
             if k in val:
                 v = val[k]
@@ -122,12 +125,14 @@ def multi_label_jaccard(exp, val):
                 vs = to_set(v)
                 r += float(len(es & vs)) / len(es.union(vs))
             else:
-                raise ValueError("Missing key in prediction {0}".format(k))
+                missing += 1
+                if exc:
+                    raise ValueError("Missing key in prediction {0}".format(k))
         return r / len(exp)
     elif isinstance(exp, list) and isinstance(val, list):
         if len(exp) != len(val):
             raise ValueError(
-                "Dimension mismatch {0} != {1}".format(len(exp), len(val)))
+                "Dimension mismatch {0} != {1}. Use product_id and only_exp.".format(len(exp), len(val)))
 
         r = 0.0
         for e, v in zip(exp, val):
@@ -137,4 +142,4 @@ def multi_label_jaccard(exp, val):
         return r / len(exp)
     else:
         raise TypeError(
-            "Inconsisten types {0} != {1}".format(type(exp), type(val)))
+            "Inconsistent types {0} != {1}".format(type(exp), type(val)))

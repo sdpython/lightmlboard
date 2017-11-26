@@ -62,6 +62,8 @@ class TestMetricsCustom(ExtTestCase):
         val = [50, 60, 100, 160, 180]
         r = l1_reg_max(exp, val)
         self.assertEqual(r, 0.02222222222222222)
+        r = l1_reg_max(exp, val, nomax=True)
+        self.assertEqual(r, 0)
 
         exp = numpy.array(exp)
         val = numpy.array(val)
@@ -69,10 +71,15 @@ class TestMetricsCustom(ExtTestCase):
         r = l1_reg_max(exp, val)
         self.assertEqual(r, 0.02222222222222222)
 
+        r = l1_reg_max(exp, val, nomax=True)
+        self.assertEqual(r, 0)
+
         exp = {i: exp[i] for i in range(0, len(exp))}
         val = {i: val[i] for i in range(0, len(val))}
         r = l1_reg_max(exp, val)
         self.assertEqual(r, 0.02222222222222222)
+        r = l1_reg_max(exp, val, nomax=True)
+        self.assertEqual(r, 0)
 
         exp = [50, 60, 100, 180, 200]
         val = [50, 60, 100, 160]
