@@ -35,7 +35,7 @@ README
 
 .. image:: https://badge.waffle.io/sdpython/lightmlboard.png?label=ready&title=Ready
     :alt: Waffle
-    :target: https://waffle.io/lightmlboard/lightmlboard
+    :target: https://waffle.io/sdpython/lightmlboard
 
 .. image:: http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/_images/nbcov.png
     :target: http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/all_notebooks_coverage.html
