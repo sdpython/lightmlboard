@@ -34,7 +34,7 @@ lightmlboard
     :alt: GitHub Issues
     :target: https://github.com/sdpython/lightmlboard/issues
 
-.. image:: https://badge.waffle.io/sdpython/lightmlboard.png?label=ready&title=Ready
+.. image:: https://badge.waffle.io/sdpython/lightmlboard.png?label=to%20do&title=to%20do
     :alt: Waffle
     :target: https://waffle.io/sdpython/lightmlboard
 
