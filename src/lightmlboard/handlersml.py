@@ -157,7 +157,7 @@ class LoginHandler(_TemplateHandler):
         incorrect = self.get_secure_cookie("incorrect")
         if incorrect and int(incorrect) > 20:
             self.write('<center>blocked</center>')
-            return
+            return None
         return self.render(self._tmpl_name, **self._tmpl_context)
 
     def set_current_user(self, user):
@@ -172,6 +172,7 @@ class LoginHandler(_TemplateHandler):
 
     @tornado.gen.coroutine
     def post(self):
+        "post"
         self.info('processing POST')
         self.info(str(self.request.arguments))
         self.info(str(self.request.headers))
@@ -246,8 +247,6 @@ class SubmitForm(_TemplateHandler):
 class UploadData(_TemplateHandler):
     """
     Upload data.
-    """
-    """
     Handlers for the form to upload dataset.
     """
 

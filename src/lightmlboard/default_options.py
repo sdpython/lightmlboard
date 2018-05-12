@@ -42,7 +42,8 @@ class LightMLBoardDefaultOptions:
     competitions = [Competition(
         cpt_id=0,
         name="Prédiction de la présence d'additifs",
-        link="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/competition_2A.html#competition-2017-additifs-alimentaires",
+        link=("http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/" +
+              "competition_2A.html#competition-2017-additifs-alimentaires"),
         expected_values=os.path.join(
             os.path.dirname(__file__), "data", "dummy_prediction.data"),
         metric=["roc_auc_score_micro", "roc_auc_score_macro"],

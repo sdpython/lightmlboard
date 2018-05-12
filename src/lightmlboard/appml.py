@@ -36,6 +36,7 @@ class LightMLBoard(Application):
         app_log = logging.getLogger("tornado.application")
         app_log.info('[LightMLBoard] Settings: {0}'.format(settings))
 
+    @staticmethod
     def update_options(config_options):
         """
         Returns updated options, includes the default ones.

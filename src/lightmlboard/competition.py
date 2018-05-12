@@ -3,9 +3,9 @@
 @file
 @brief Defines a competition.
 """
+from io import StringIO
 import numpy
 import pandas
-from io import StringIO
 from .metrics import mse, sklearn_metric, roc_auc_score_macro, roc_auc_score_micro
 
 
@@ -53,7 +53,7 @@ class Competition:
             if len(values) == 0:
                 raise ValueError("values cannot be empty")
             if isinstance(values[0], dict):
-                res = pandas.DataFrame(values, header=None, dtype=float)
+                res = pandas.DataFrame(values, dtype=float)
             else:
                 res = pandas.DataFrame(numpy.array(values), dtype=float)
                 if res.shape[0] < res.shape[1]:

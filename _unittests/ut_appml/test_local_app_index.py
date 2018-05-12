@@ -6,23 +6,9 @@
 import sys
 import os
 import unittest
-
-
-try:
-    import pyquickhelper as skip_
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..",
-                "..",
-                "pyquickhelper",
-                "src")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import pyquickhelper as skip_
+from tornado.testing import AsyncHTTPTestCase
+from tornado.escape import json_encode
+from pyquickhelper.loghelper import fLOG
 
 
 try:
@@ -38,10 +24,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from pyquickhelper.loghelper import fLOG
-from tornado.testing import AsyncHTTPTestCase
 from src.lightmlboard.appml import LightMLBoard
-from tornado.escape import json_encode
 
 
 class TestLocalAppIndex(AsyncHTTPTestCase):
@@ -62,7 +45,8 @@ class TestLocalAppIndex(AsyncHTTPTestCase):
                    'Cache-Control': 'max-age=0',
                    'Origin': 'http://localhost:8897', 'Upgrade-Insecure-Requests': '1',
                    'Content-Type': 'application/x-www-form-urlencoded',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+                   'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+                                  '(KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'),
                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                    'Referer': 'http://localhost:8897/login',
                    'Accept-Encoding': 'gzip, deflate, br',
@@ -74,7 +58,7 @@ class TestLocalAppIndex(AsyncHTTPTestCase):
         response = self.fetch('/login', method='POST',
                               headers=headers, body=body)
         # Does not work due to:  '_xsrf' argument missing from POST
-        return
+        # return
         self.assertEqual(response.code, 200)
         self.assertNotIn(b"Identification...", response.body)
 

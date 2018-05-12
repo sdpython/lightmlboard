@@ -3,9 +3,9 @@
 @brief Manages a sqlite3 database to store the results.
 """
 import datetime
+from uuid import uuid4
 import numpy
 import pandas
-from uuid import uuid4
 from .dbengine import Database
 from .options_helpers import read_options, read_users
 from .competition import Competition

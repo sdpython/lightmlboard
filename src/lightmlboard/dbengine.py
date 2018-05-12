@@ -2,10 +2,10 @@
 @file
 @brief Manages a sqlite3 database.
 """
-import numpy
 import sqlite3
 import datetime
 import decimal
+import numpy
 
 
 class DBException(Exception):

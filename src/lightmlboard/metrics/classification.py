@@ -87,6 +87,7 @@ def multi_label_jaccard(exp, val, exc=True):
 
     """
     def to_set(v):
+        "as a set"
         if isinstance(v, set):
             return v
         elif isinstance(v, str):
