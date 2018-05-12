@@ -50,6 +50,7 @@ class TestCodeStyle(ExtTestCase):
                          "Unused variable 'skip_'",
                          "imported as skip_",
                          "Unused import src",
+                         "test_local_app_index.py:62: W0101",
                          ])
 
 

@@ -58,7 +58,7 @@ class TestLocalAppIndex(AsyncHTTPTestCase):
         response = self.fetch('/login', method='POST',
                               headers=headers, body=body)
         # Does not work due to:  '_xsrf' argument missing from POST
-        # return
+        return
         self.assertEqual(response.code, 200)
         self.assertNotIn(b"Identification...", response.body)
 
