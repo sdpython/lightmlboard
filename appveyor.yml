@@ -23,7 +23,7 @@ install:
   - "%PYTHON%\\Scripts\\pip install pyquickhelper --no-deps"
   - "%PYTHON%\\Scripts\\pip install wcwidth backcall"
   - "%PYTHON%\\Scripts\\pymy_install3 scikit-learn scipy"
-  - "%PYTHON%\\Scripts\\pip install -r requirements"
+  - "%PYTHON%\\Scripts\\pip install -r requirements.txt"
   - "set PATH=%PATH%;C:\\projects\\jyquickhelper\\build\\update_modules\\Graphviz\\bin"
 build: off
 
