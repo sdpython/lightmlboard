@@ -1,6 +1,7 @@
 coverage
 jyquickhelper
 keyring
+pillow
 pyquickhelper>=1.8
 scikit-learn
 scipy
