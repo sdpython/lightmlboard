@@ -21,7 +21,7 @@ def l1_reg_max(exp, val, max_val=180, nomax=False, exc=True):
     @param                  raises an exception if not enough submitted items
     @return                 score
 
-    If ``max_val==180`, the function computes:
+    If ``max_val==180``, the function computes:
 
     .. math::
 
