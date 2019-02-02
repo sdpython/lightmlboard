@@ -38,8 +38,8 @@ def l1_reg_max(exp, val, max_val=180, nomax=False, exc=True):
                 "Dimension mismatch {0} != {1}".format(len(exp), len(val)))
         an = numpy.zeros((len(exp),))
         an[:] = max_val
-        mv = numpy.minimum(an, val)
-        me = numpy.minimum(an, exp)
+        mv = numpy.minimum(an, val)  # pylint: disable=E1111
+        me = numpy.minimum(an, exp)  # pylint: disable=E1111
         if nomax:
             mv = mv[me < max_val]
             me = me[me < max_val]
