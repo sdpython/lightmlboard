@@ -1,9 +1,4 @@
 
-.. _l-README:
-
-README
-======
-
 .. image:: https://travis-ci.org/sdpython/lightmlboard.svg?branch=master
     :target: https://travis-ci.org/sdpython/lightmlboard
     :alt: Build status
@@ -41,11 +36,13 @@ README
     :target: http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-*lightmlboard* implements a server to hold the result of a machine learning competition.
+.. _l-README:
 
-*not ready*
+lightmlboard
+============
 
-**Links:**
+It implements a server to hold the result of a machine learning competition.
+It is a work in progress.
 
 * `GitHub/lightmlboard <https://github.com/sdpython/lightmlboard/>`_
 * `documentation <http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/index.html>`_
