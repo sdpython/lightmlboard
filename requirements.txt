@@ -1,6 +1,7 @@
 coverage
 jyquickhelper
 keyring
+git+https://github.com/sdpython/nbconvert.git@fixes
 pillow
 pyquickhelper>=1.8.2814
 scikit-learn
