@@ -184,8 +184,8 @@ class LoginHandler(_TemplateHandler):
         getusername = tornado.escape.xhtml_escape(
             self.get_argument("username"))
         getpassword = tornado.escape.xhtml_escape(
-            self.get_argument("password"))
-        self.info("login='{0}'".format(getusername))
+            self.get_argument("password", ""))
+        self.info("login='{0}'".format(getusername, ""))
         self.info("nb users={0}".format(len(self._users)))
         if getusername in self._users:
             val = self._users[getusername]
@@ -262,6 +262,7 @@ class UploadData(_TemplateHandler):
 
     @tornado.gen.coroutine
     def post(self):
+        "post"
         fileinfo = self.request.files['filearg'][0]
         self.info("fileinfo={0}".format(fileinfo))
         fname = fileinfo['filename']
