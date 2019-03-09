@@ -182,10 +182,10 @@ class LoginHandler(_TemplateHandler):
             return
 
         getusername = tornado.escape.xhtml_escape(
-            self.get_argument("username"))
+            self.get_argument("username", ""))
         getpassword = tornado.escape.xhtml_escape(
             self.get_argument("password", ""))
-        self.info("login='{0}'".format(getusername, ""))
+        self.info("login='{0}'".format(getusername))
         self.info("nb users={0}".format(len(self._users)))
         if getusername in self._users:
             val = self._users[getusername]
