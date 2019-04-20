@@ -3,9 +3,9 @@ jyquickhelper
 keyring
 git+https://github.com/sdpython/nbconvert.git@fixes
 pillow
-pyquickhelper>=1.8.2814
+pyquickhelper>=1.9
 scikit-learn
 scipy
-sphinx_rtd_theme
+sphinx_readable_theme
 tornado
 wheel
