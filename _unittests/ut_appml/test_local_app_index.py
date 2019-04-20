@@ -2,29 +2,11 @@
 """
 @brief      test log(time=33s)
 """
-
-import sys
 import os
 import unittest
 from tornado.testing import AsyncHTTPTestCase
 from tornado.escape import json_encode
-from pyquickhelper.loghelper import fLOG
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.appml import LightMLBoard
+from lightmlboard.appml import LightMLBoard
 
 
 class TestLocalAppIndex(AsyncHTTPTestCase):
@@ -35,10 +17,6 @@ class TestLocalAppIndex(AsyncHTTPTestCase):
         return LightMLBoard.make_app(config=config, logged=dict(user='xd', pwd='pwd'))
 
     def test_local_index(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         post = dict(user=['xd'], pwd=['pwd'],
                     _xsrf=['2|a114f78b|3990916811cdda4bbaec096bf1f57923|1507577457'])
         headers = {'Host': 'localhost:8897', 'Connection': 'keep-alive',
@@ -59,7 +37,7 @@ class TestLocalAppIndex(AsyncHTTPTestCase):
                               headers=headers, body=body)
         # Does not work due to:  '_xsrf' argument missing from POST
         return
-        self.assertEqual(response.code, 200)
+        self.assertEqual(response.code, 200)  # pylint: disable=W0101
         self.assertNotIn(b"Identification...", response.body)
 
 

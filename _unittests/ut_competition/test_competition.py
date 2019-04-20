@@ -2,39 +2,15 @@
 """
 @brief      test log(time=1s)
 """
-
-import sys
-import os
 import unittest
-from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.competition import Competition
-from src.lightmlboard.default_options import LightMLBoardDefaultOptions
+from lightmlboard.competition import Competition
+from lightmlboard.default_options import LightMLBoardDefaultOptions
 
 
 class TestCompetition(ExtTestCase):
 
     def test_competition(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         vals = LightMLBoardDefaultOptions.competitions
         ds = [v.to_dict() for v in vals]
         vals2 = [Competition(**d) for d in ds]

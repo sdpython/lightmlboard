@@ -3,38 +3,16 @@
 @brief      test log(time=1s)
 """
 import io
-import sys
-import os
 import unittest
 import pandas
 import numpy
-from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.metrics import l1_reg_max, multi_label_jaccard
+from lightmlboard.metrics import l1_reg_max, multi_label_jaccard
 
 
 class TestMetricsCustom(ExtTestCase):
 
     def test_l1_reg_max(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         exp = [50, 60, 100, 180, 200]
         val = [50, 60, 100, 180, 180]
         r = l1_reg_max(exp, val)
@@ -75,11 +53,6 @@ class TestMetricsCustom(ExtTestCase):
         self.assertRaise(lambda: l1_reg_max(exp, tuple(val)), TypeError)
 
     def test_l1_reg_max_streams(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         st1 = io.StringIO()
         st2 = io.StringIO()
         exp = [50, 60, 100, 180, 200]
@@ -93,11 +66,6 @@ class TestMetricsCustom(ExtTestCase):
         self.assertEqual(r, 0)
 
     def test_classification_jaccard(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         exp = ["4", "5", "6,7", [6, 7], (6, 7), {6, 7}]
         val = ["4", ["5"], "6,7", [6, 7], (6, 7), {6, 7}]
         r = multi_label_jaccard(exp, val)
@@ -119,11 +87,6 @@ class TestMetricsCustom(ExtTestCase):
             exp, tuple(val)), TypeError)
 
     def test_classification_jaccard_streams(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         st1 = io.StringIO()
         st2 = io.StringIO()
         exp = ["4", "5", "6,7", "6,7", "6,7", "6,7"]

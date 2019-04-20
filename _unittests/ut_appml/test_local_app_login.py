@@ -2,27 +2,10 @@
 """
 @brief      test log(time=33s)
 """
-
-import sys
 import os
 import unittest
 from tornado.testing import AsyncHTTPTestCase
-from pyquickhelper.loghelper import fLOG
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.appml import LightMLBoard
+from lightmlboard.appml import LightMLBoard
 
 
 class TestLocalApp(AsyncHTTPTestCase):
@@ -33,10 +16,6 @@ class TestLocalApp(AsyncHTTPTestCase):
         return LightMLBoard.make_app(config=config)
 
     def test_local_login(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
         self.assertIn(b"LightMLBoard", response.body)

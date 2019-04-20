@@ -2,30 +2,13 @@
 """
 @brief      test log(time=33s)
 """
-
-import sys
 import os
 import unittest
 from tornado.testing import AsyncHTTPTestCase
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import get_temp_folder
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.appml import LightMLBoard
-from src.lightmlboard.static import copy_static
+from lightmlboard.appml import LightMLBoard
+from lightmlboard.static import copy_static
 
 
 class TestLocalAppChallenge(AsyncHTTPTestCase):

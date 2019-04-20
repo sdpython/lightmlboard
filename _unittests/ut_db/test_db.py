@@ -2,41 +2,18 @@
 """
 @brief      test log(time=1s)
 """
-
-import sys
 import os
 import unittest
 from io import StringIO
 import pandas
-from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.lightmlboard.dbmanager import DatabaseCompetition
-from src.lightmlboard.competition import Competition
+from lightmlboard.dbmanager import DatabaseCompetition
+from lightmlboard.competition import Competition
 
 
 class TestDb(ExtTestCase):
 
     def test_creation_memory(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         db = DatabaseCompetition(":memory:")
         db.connect()
         dbl = db.get_table_list()
@@ -45,11 +22,6 @@ class TestDb(ExtTestCase):
             dbl, ['competitions', 'players', 'submissions', 'teams'])
 
     def test_creation_file(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         temp = get_temp_folder(__file__, "temp_creation_file")
         name = os.path.join(temp, "ex.db3")
         db = DatabaseCompetition(name)
@@ -61,11 +33,6 @@ class TestDb(ExtTestCase):
         self.assertExists(name)
 
     def test_creation_db(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         db = DatabaseCompetition(":memory:")
         data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
         opt = os.path.join(data, "ex_default_options.py")
@@ -83,11 +50,6 @@ class TestDb(ExtTestCase):
         self.assertEqual(dfs.shape, (1, 7))
 
     def test_submission(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
         fname = os.path.join(data, "off_eval_all_Y.txt")
         df = pandas.read_csv(fname)
@@ -117,11 +79,6 @@ class TestDb(ExtTestCase):
             subs[-1][-2:], ('mean_squared_error', 0.009999999999999997))
 
     def test_get_competition(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         db = DatabaseCompetition(":memory:")
         data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
         opt = os.path.join(data, "ex_default_options.py")
@@ -132,11 +89,6 @@ class TestDb(ExtTestCase):
         self.assertIsInstance(cpt, Competition)
 
     def test_get_results(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         db = DatabaseCompetition(":memory:")
         data = os.path.abspath(os.path.join(os.path.dirname(__file__), "data"))
         opt = os.path.join(data, "ex_default_options.py")
