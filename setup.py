@@ -153,20 +153,20 @@ if not r:
     if len(sys.argv) in (1, 2) and sys.argv[-1] in ("--help-commands",):
         from pyquickhelper.pycode import process_standard_options_for_setup_help
         process_standard_options_for_setup_help(sys.argv)
-
+        
     try:
         from pyquickhelper.pycode import clean_readme
     except ImportError:
-        def clean_readme(x): return x
+        clean_readme = lambda x: x
 
     try:
         from lightmlboard import __version__ as sversion
     except ImportError:
         last = len(sys.path)
-        sys.path.append(src)
+        sys.path.append('src')
         from lightmlboard import __version__ as sversion
         del sys.path[last]
-
+    
     long_description = clean_readme(long_description)
     root = os.path.abspath(os.path.dirname(__file__))
     if sys.platform.startswith("win"):
