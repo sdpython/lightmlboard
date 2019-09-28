@@ -41,8 +41,8 @@ def l1_reg_max(exp, val, max_val=180, nomax=False, exc=True):
         mv = numpy.minimum(an, val)  # pylint: disable=E1111
         me = numpy.minimum(an, exp)  # pylint: disable=E1111
         if nomax:
-            mv = mv[me < max_val]
-            me = me[me < max_val]
+            mv = mv[me < max_val]  # pylint: disable=W0143,E1136
+            me = me[me < max_val]  # pylint: disable=W0143,E1136
         df = numpy.abs(mv - me) / max_val
         return df.mean()
     elif isinstance(exp, dict) and isinstance(val, dict):

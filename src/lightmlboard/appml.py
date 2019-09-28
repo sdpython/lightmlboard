@@ -55,7 +55,7 @@ class LightMLBoard(Application):
                     elif k == "lang":
                         lang = v
                     elif k == "debug":
-                        debug = debug
+                        pass
                     elif k == "logging":
                         enablelog = v
                     elif k == "allowed_users":
@@ -135,7 +135,7 @@ class LightMLBoard(Application):
         @param      port        port to listen
         @param      kwargs      @see me make_app
         """
-        import tornado.ioloop
+        import tornado.ioloop  # pylint: disable=C0415
         app = LightMLBoard.make_app(**kwargs)
         app.listen(port)
         tornado.ioloop.IOLoop.current().start()
