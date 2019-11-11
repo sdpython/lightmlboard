@@ -1,7 +1,6 @@
 coverage
 jyquickhelper
 keyring
-git+https://github.com/sdpython/nbconvert.git@fixes
 pillow
 pylint>=2.4.2
 pyquickhelper>=1.9.3240
