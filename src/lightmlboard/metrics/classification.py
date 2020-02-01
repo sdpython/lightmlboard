@@ -24,9 +24,9 @@ def reshape(exp, val):
     if isinstance(exp, list):
         exp = numpy.array(exp)
     if isinstance(val, pandas.DataFrame):
-        val = val.as_matrix()
+        val = val.values
     if isinstance(exp, pandas.DataFrame):
-        exp = exp.as_matrix()
+        exp = exp.values
     if not isinstance(val, numpy.ndarray):
         raise TypeError("val is {0} not an array".format(type(val)))
     if not isinstance(exp, numpy.ndarray):
