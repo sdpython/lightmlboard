@@ -38,6 +38,10 @@ lightmlboard
     :target: http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://img.shields.io/github/repo-size/sdpython/lightmlboard
+    :target: https://github.com/sdpython/lightmlboard/
+    :alt: size
+
 *lightmlboard* implements a light machine learning leaderboard
 based on :epkg:`tornado`.
 
