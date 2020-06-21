@@ -1,9 +1,11 @@
+autopep8
 coverage
 jyquickhelper
 keyring
 matplotlib
 pandas
 pillow
+pycodestyle
 pylint>=2.4.2
 pyquickhelper>=1.9.3240
 scikit-learn
