@@ -1,6 +1,7 @@
 coverage
 jyquickhelper
 keyring
+matplotlib
 pandas
 pillow
 pylint>=2.4.2
