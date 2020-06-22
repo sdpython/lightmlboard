@@ -11,5 +11,6 @@ pyquickhelper>=1.9.3240
 scikit-learn
 scipy
 sphinx_gallery
+sphinxcontrib.imagesvg
 tornado
 wheel
