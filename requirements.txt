@@ -4,6 +4,7 @@ jupyter_sphinx
 jyquickhelper
 keyring
 matplotlib
+nbconvert>=6.0.2
 pandas
 pillow
 pycodestyle
