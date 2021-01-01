@@ -112,4 +112,5 @@ class TestDb(ExtTestCase):
 
 
 if __name__ == "__main__":
+    TestDb().test_creation_memory()
     unittest.main()

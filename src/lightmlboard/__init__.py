@@ -6,7 +6,7 @@ Custom Machine Learning Leaderbord for a competition.
 """
 from .appml import LightMLBoard
 
-__version__ = "0.2.103"
+__version__ = "0.2.104"
 __author__ = "Xavier Dupré"
 __github__ = "https://github.com/sdpython/lightmlboard"
 __url__ = "http://www.xavierdupre.fr/app/lightmlboard/helpsphinx/index.html"

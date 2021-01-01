@@ -139,9 +139,10 @@ class Database:
             raise DBException("Tables '{0}' is already present.".format(table))
 
         if isinstance(columns, list):
-            columns = {}
+            columns_ = {}
             for i, v in enumerate(columns):
-                columns[i] = v
+                columns_[i] = v
+            columns = columns_
 
         if temporary:
             sql = "CREATE TEMPORARY TABLE " + table + "("
