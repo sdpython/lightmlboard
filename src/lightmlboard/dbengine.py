@@ -139,7 +139,9 @@ class Database:
             raise DBException("Tables '{0}' is already present.".format(table))
 
         if isinstance(columns, list):
-            columns = {i: v for i, v in enumerate(columns)}  # pylint: disable=R1721
+            columns = {}
+            for i, v in enumerate(columns):
+                columns[i] = v
 
         if temporary:
             sql = "CREATE TEMPORARY TABLE " + table + "("
