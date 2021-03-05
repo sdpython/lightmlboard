@@ -26,11 +26,11 @@ class LightMLBoardDefaultOptions:
 
     description = """Tableaux de résultats pour la compétition
         de machine learning organisé dans le cadre du cours
-        <a href="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/index.html">Python pour un data scientist économiste</a>.
+        <a href="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/index.html">Python pour un data scientist économiste</a>.
         """.replace("        ", "")
 
     description2 = """Détails de la compétition :
-        <a href="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/competition_2A.html#l-competition-2017-2a">
+        <a href="http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/questions/competition_2A.html#l-competition-2017-2a">
         Compétition 2017 - additifs alimentaires</a>.
         """.replace("        ", "")
 
@@ -42,7 +42,7 @@ class LightMLBoardDefaultOptions:
     competitions = [Competition(
         cpt_id=0,
         name="Prédiction de la présence d'additifs",
-        link=("http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx3/questions/" +
+        link=("http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/questions/" +
               "competition_2A.html#competition-2017-additifs-alimentaires"),
         expected_values=os.path.join(
             os.path.dirname(__file__), "data", "dummy_prediction.data"),
