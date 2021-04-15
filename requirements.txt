@@ -9,7 +9,8 @@ pandas
 pillow
 pycodestyle
 pylint>=2.4.2
-pyquickhelper>=1.9.3240
+pyquickhelper>=1.10
+pyquicksetup
 scikit-learn
 scipy
 sphinx_gallery
