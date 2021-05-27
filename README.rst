@@ -1,6 +1,6 @@
 
-.. image:: https://travis-ci.org/sdpython/lightmlboard.svg?branch=master
-    :target: https://travis-ci.org/sdpython/lightmlboard
+.. image:: https://travis-ci.com/sdpython/lightmlboard.svg?branch=master
+    :target: https://travis-ci.com/sdpython/lightmlboard
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/6g0xro11tmc6t05d?svg=true
