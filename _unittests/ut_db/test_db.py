@@ -44,7 +44,7 @@ class TestDb(ExtTestCase):
         dfs = db.to_df("submissions")
         db.close()
         self.assertEqual(dft.shape, (1, 2))
-        self.assertEqual(dft.iloc[0, 1], "team1")
+        self.assertEqual(dft.iloc[0, 1], "team1")  # pylint: disable=E1101
         self.assertEqual(dfp.shape, (1, 7))
         self.assertEqual(dfc.shape, (1, 7))
         self.assertEqual(dfs.shape, (1, 7))

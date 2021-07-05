@@ -51,7 +51,7 @@ def read_users(filename):
     """
     df = pandas.read_csv(filename)
     cols = list(sorted(df.columns))
-    df = df[cols]
+    df = df[cols]  # pylint: disable=E1136
     exp = "login,mail,name,pwd,team".split(",")
     has = list(df.columns)
     if exp != has:
