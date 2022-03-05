@@ -16,7 +16,7 @@ readme = 'README.rst'
 history = "HISTORY.rst"
 requirements = None
 
-KEYWORDS = project_var_name + ', Xavier Dupré'
+KEYWORDS = [project_var_name, 'Xavier Dupré']
 DESCRIPTION = """Light web server serving pages on a leaderboard for machine learned competitions"""
 CLASSIFIERS = [
     'Programming Language :: Python :: 3',
