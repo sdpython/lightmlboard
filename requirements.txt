@@ -8,7 +8,7 @@ nbconvert>=6.0.2
 pandas
 pillow
 pycodestyle
-pylint>=2.4.2
+pylint>=2.14.0
 pyquickhelper>=1.10
 pyquicksetup
 scikit-learn
